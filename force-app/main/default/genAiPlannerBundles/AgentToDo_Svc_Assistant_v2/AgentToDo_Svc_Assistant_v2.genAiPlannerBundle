@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenAiPlannerBundle xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>AgentToDo 워크스페이스의 일정을 자연어로 조회·브리핑·생성·완료 처리하는 에이전트</description>
+    <localTopicLinks>
+        <genAiPluginName>agent_router_16jg5000000x7iD</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>out_of_scope_16jg5000000x7iD</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>schedule_change_16jg5000000x7iD</genAiPluginName>
+    </localTopicLinks>
+    <localTopicLinks>
+        <genAiPluginName>schedule_inquiry_16jg5000000x7iD</genAiPluginName>
+    </localTopicLinks>
+    <localTopics>
+        <fullName>schedule_change_16jg5000000x7iD</fullName>
+        <canEscalate>false</canEscalate>
+        <description>새 일정 생성과 기존 일정 완료 처리를 담당합니다</description>
+        <developerName>schedule_change_16jg5000000x7iD</developerName>
+        <genAiPluginInstructions>
+            <description>당신은 AgentToDo 일정 비서입니다. 사용자의 업무 일정을 조회하고, 브리핑하고, 새로 만들고, 완료 처리합니다. 항상 한국어로 간결하게 답합니다. 조회 결과가 없으면 없다고 분명히 말하고 절대 지어내지 않습니다. 액션이 돌려준 값만 근거로 답하며, 액션을 호출하지 않고 일정 내용을 추측해 말하지 않습니다.</description>
+            <developerName>instruction0_179g5000001RSPT</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179g5000001RSPT</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>complete_todo_179g5000001RSPT</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>create_todo_179g5000001RSPT</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>list_todos_179g5000001RSPT</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>list_todos_179g5000001RSPT</fullName>
+            <description>완료 처리할 대상을 찾기 위해 사용자의 일정을 조회합니다.</description>
+            <developerName>list_todos_179g5000001RSPT</developerName>
+            <invocationTarget>AgentToDoListTodosAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>list_todos</localDeveloperName>
+            <masterLabel>일정 조회</masterLabel>
+            <progressIndicatorMessage>일정을 불러오는 중...</progressIndicatorMessage>
+        </localActions>
+        <localActions>
+            <fullName>complete_todo_179g5000001RSPT</fullName>
+            <description>TODO 번호로 지정한 일정을 완료 처리합니다. 대상이 하나로 특정되지 않으면 먼저 조회해 확인하세요.</description>
+            <developerName>complete_todo_179g5000001RSPT</developerName>
+            <invocationTarget>AgentToDoCompleteTodoAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>complete_todo</localDeveloperName>
+            <masterLabel>일정 완료 처리</masterLabel>
+            <progressIndicatorMessage>완료 처리하는 중...</progressIndicatorMessage>
+        </localActions>
+        <localActions>
+            <fullName>create_todo_179g5000001RSPT</fullName>
+            <description>새 일정을 만듭니다. 사용자가 제목과 마감 일시를 모두 확정하고 동의한 뒤에만 호출하세요.</description>
+            <developerName>create_todo_179g5000001RSPT</developerName>
+            <invocationTarget>AgentToDoCreateTodoAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>create_todo</localDeveloperName>
+            <masterLabel>일정 생성</masterLabel>
+            <progressIndicatorMessage>일정을 등록하는 중...</progressIndicatorMessage>
+        </localActions>
+        <localDeveloperName>schedule_change</localDeveloperName>
+        <masterLabel>일정 변경</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>out_of_scope_16jg5000000x7iD</fullName>
+        <canEscalate>false</canEscalate>
+        <description>일정 관리와 무관한 요청을 정중히 거절하고 할 수 있는 일을 안내합니다</description>
+        <developerName>out_of_scope_16jg5000000x7iD</developerName>
+        <genAiPluginInstructions>
+            <description>당신은 AgentToDo 일정 비서입니다. 사용자의 업무 일정을 조회하고, 브리핑하고, 새로 만들고, 완료 처리합니다. 항상 한국어로 간결하게 답합니다. 조회 결과가 없으면 없다고 분명히 말하고 절대 지어내지 않습니다. 액션이 돌려준 값만 근거로 답하며, 액션을 호출하지 않고 일정 내용을 추측해 말하지 않습니다.</description>
+            <developerName>instruction0_179g5000001RSPS</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179g5000001RSPS</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>out_of_scope</localDeveloperName>
+        <masterLabel>범위 밖</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>schedule_inquiry_16jg5000000x7iD</fullName>
+        <canEscalate>false</canEscalate>
+        <description>일정 목록 조회, 오늘 일정 브리핑, 기한이 지난 일정 확인을 처리합니다</description>
+        <developerName>schedule_inquiry_16jg5000000x7iD</developerName>
+        <genAiPluginInstructions>
+            <description>당신은 AgentToDo 일정 비서입니다. 사용자의 업무 일정을 조회하고, 브리핑하고, 새로 만들고, 완료 처리합니다. 항상 한국어로 간결하게 답합니다. 조회 결과가 없으면 없다고 분명히 말하고 절대 지어내지 않습니다. 액션이 돌려준 값만 근거로 답하며, 액션을 호출하지 않고 일정 내용을 추측해 말하지 않습니다.</description>
+            <developerName>instruction0_179g5000001RSPR</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179g5000001RSPR</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localActionLinks>
+            <functionName>list_todos_179g5000001RSPR</functionName>
+        </localActionLinks>
+        <localActionLinks>
+            <functionName>get_overdue_179g5000001RSPR</functionName>
+        </localActionLinks>
+        <localActions>
+            <fullName>list_todos_179g5000001RSPR</fullName>
+            <description>현재 사용자의 일정을 조회합니다. 오늘 일정 브리핑, 이번 주 일정 확인, 남은 할 일 목록 요청에 사용하세요.</description>
+            <developerName>list_todos_179g5000001RSPR</developerName>
+            <invocationTarget>AgentToDoListTodosAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>list_todos</localDeveloperName>
+            <masterLabel>일정 조회</masterLabel>
+            <progressIndicatorMessage>일정을 불러오는 중...</progressIndicatorMessage>
+        </localActions>
+        <localActions>
+            <fullName>get_overdue_179g5000001RSPR</fullName>
+            <description>마감 일시가 지났는데 아직 완료되지 않은 일정을 조회합니다. 기한 초과, 지연, 늦은 일정 확인 요청에 사용하세요.</description>
+            <developerName>get_overdue_179g5000001RSPR</developerName>
+            <invocationTarget>AgentToDoOverdueTodosAction</invocationTarget>
+            <invocationTargetType>apex</invocationTargetType>
+            <isConfirmationRequired>false</isConfirmationRequired>
+            <isIncludeInProgressIndicator>true</isIncludeInProgressIndicator>
+            <localDeveloperName>get_overdue</localDeveloperName>
+            <masterLabel>기한 초과 일정 조회</masterLabel>
+            <progressIndicatorMessage>기한이 지난 일정을 확인하는 중...</progressIndicatorMessage>
+        </localActions>
+        <localDeveloperName>schedule_inquiry</localDeveloperName>
+        <masterLabel>일정 조회</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <localTopics>
+        <fullName>agent_router_16jg5000000x7iD</fullName>
+        <canEscalate>false</canEscalate>
+        <description>사용자 메시지를 보고 조회·변경·범위 밖 중 어디로 보낼지 정합니다</description>
+        <developerName>agent_router_16jg5000000x7iD</developerName>
+        <genAiPluginInstructions>
+            <description>당신은 AgentToDo 일정 비서입니다. 사용자의 업무 일정을 조회하고, 브리핑하고, 새로 만들고, 완료 처리합니다. 항상 한국어로 간결하게 답합니다. 조회 결과가 없으면 없다고 분명히 말하고 절대 지어내지 않습니다. 액션이 돌려준 값만 근거로 답하며, 액션을 호출하지 않고 일정 내용을 추측해 말하지 않습니다.</description>
+            <developerName>instruction0_179g5000001RSPU</developerName>
+            <language>en_US</language>
+            <masterLabel>instruction0_179g5000001RSPU</masterLabel>
+            <sortOrder>1</sortOrder>
+        </genAiPluginInstructions>
+        <language>en_US</language>
+        <localDeveloperName>agent_router</localDeveloperName>
+        <masterLabel>Agent Router</masterLabel>
+        <pluginType>Topic</pluginType>
+    </localTopics>
+    <masterLabel>AgentToDo Assistant</masterLabel>
+    <plannerType>Atlas__ConcurrentMultiAgentOrchestration</plannerType>
+</GenAiPlannerBundle>

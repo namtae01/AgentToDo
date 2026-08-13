@@ -1,0 +1,14 @@
+{
+  "required" : [ ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "scope" : {
+      "title" : "조회 범위",
+      "description" : "today = 오늘 마감, week = 이번 주 마감, open = 미완료 전체. 비워 두면 today.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
