@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description
+  >AgentToDo 일정(할 일) 항목. 사용자가 직접 등록하거나 AgentToDo Assistant가 생성/변경하며, 캘린더·오늘의 일정·받은 작업 화면의 단일 데이터 원본으로 사용됩니다.</description>
+    <label>일정</label>
+    <pluralLabel>일정</pluralLabel>
+    <nameField>
+        <label>Todo 번호</label>
+        <type>AutoNumber</type>
+        <displayFormat>TODO-{0000}</displayFormat>
+        <startingNumber>1</startingNumber>
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <visibility>Public</visibility>
+    <sharingModel>Private</sharingModel>
+    <enableSearch>true</enableSearch>
+    <enableReports>true</enableReports>
+    <enableActivities>true</enableActivities>
+    <enableHistory>true</enableHistory>
+</CustomObject>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Created_By_Agent__c</fullName>
+    <description
+  >AgentToDo Assistant가 생성한 일정인지 여부. 상세 드로어의 "Agent 생성" 배지로 표시됩니다.</description>
+    <label>Agent 생성</label>
+    <type>Checkbox</type>
+    <defaultValue>false</defaultValue>
+    <trackHistory>false</trackHistory>
+</CustomField>

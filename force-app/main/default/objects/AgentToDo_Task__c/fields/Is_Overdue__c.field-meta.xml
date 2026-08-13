@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Is_Overdue__c</fullName>
+    <description
+  >기한 초과 여부. 완료되지 않은 상태에서 마감 일시가 현재 시각을 지났으면 true입니다. 캘린더에서 빨간색으로 표시됩니다.</description>
+    <label>기한 초과</label>
+    <type>Checkbox</type>
+    <formula>AND(
+  NOT(ISPICKVAL(Status__c, &quot;Done&quot;)),
+  NOT(ISBLANK(Due_At__c)),
+  Due_At__c &lt; NOW()
+)</formula>
+    <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+</CustomField>

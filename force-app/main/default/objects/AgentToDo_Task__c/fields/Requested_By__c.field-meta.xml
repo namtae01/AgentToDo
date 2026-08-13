@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Requested_By__c</fullName>
+    <description
+  >일정을 요청한 사용자. 비어 있거나 소유자 본인이면 "내 일정", 타인이면 "받은 작업"으로 분류됩니다.</description>
+    <label>요청자</label>
+    <inlineHelpText
+  >다른 사람이 요청한 작업일 때만 지정합니다. 비워 두면 본인이 만든 일정입니다.</inlineHelpText>
+    <type>Lookup</type>
+    <referenceTo>User</referenceTo>
+    <relationshipName>AgentToDo_Requested_Tasks</relationshipName>
+    <relationshipLabel>요청한 AgentToDo 일정</relationshipLabel>
+    <deleteConstraint>SetNull</deleteConstraint>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+</CustomField>
