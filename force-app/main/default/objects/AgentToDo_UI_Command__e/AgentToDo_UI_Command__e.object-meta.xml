@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  에이전트가 브라우저 화면을 제어하기 위한 서버 → 클라이언트 신호.
+
+  왜 필요한가: 에이전트는 서버에서 실행되어 UI 에 접근할 수 없고,
+  Agent API 동기 엔드포인트는 어떤 액션이 실행됐는지(result)를 돌려주지
+  않습니다. 따라서 LWC 가 "네비게이션 액션이 실행됐다"는 사실을 알 방법이
+  없어, 별도의 푸시 채널이 필요합니다.
+
+  PublishImmediately 인 이유: 화면 전환은 트랜잭션 커밋을 기다릴 이유가
+  없는 순수 UI 신호입니다. 즉시 발행해 지연을 줄입니다.
+-->
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description
+  >AgentToDo Assistant 가 LWC 화면에 보내는 UI 명령. 현재는 화면 전환(navigate)에만 사용합니다.</description>
+    <eventType>HighVolume</eventType>
+    <label>AgentToDo UI Command</label>
+    <pluralLabel>AgentToDo UI Commands</pluralLabel>
+    <publishBehavior>PublishImmediately</publishBehavior>
+</CustomObject>

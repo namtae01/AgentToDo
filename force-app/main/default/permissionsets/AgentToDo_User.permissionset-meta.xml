@@ -13,6 +13,17 @@
         <viewAllRecords>false</viewAllRecords>
         <modifyAllRecords>false</modifyAllRecords>
     </objectPermissions>
+    <!-- 화면 전환 신호용 플랫폼 이벤트.
+         Action 이 발행하려면 Create, LWC 가 구독하려면 Read 가 필요합니다. -->
+    <objectPermissions>
+        <object>AgentToDo_UI_Command__e</object>
+        <allowCreate>true</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>false</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>false</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
     <!-- Subject__c 와 Due_At__c 는 필드 레벨 필수(required)이므로 FLS 항목을 둘 수 없습니다.
          필수 필드는 오브젝트 접근 권한만으로 항상 읽기/쓰기가 허용됩니다. -->
     <fieldPermissions>
@@ -88,6 +99,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>AgentToDoCompleteTodoAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoNavigateAction</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <!-- Agent API 호출에 쓰는 자격 증명 주체 접근 권한.

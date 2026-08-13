@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Command__c</fullName>
+    <description
+  >UI 명령 종류. 현재는 navigate 만 사용합니다. 명령이 늘어나도 LWC 가 알 수 없는 값을 무시할 수 있도록 종류를 분리해 둡니다.</description>
+    <label>Command</label>
+    <type>Text</type>
+    <length>40</length>
+    <required>true</required>
+</CustomField>

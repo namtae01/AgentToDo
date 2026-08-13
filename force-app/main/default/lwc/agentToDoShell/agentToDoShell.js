@@ -1,6 +1,8 @@
 import { LightningElement, track, wire } from "lwc";
 import { refreshApex } from "@salesforce/apex";
 import { ShowToastEvent } from "lightning/platformShowToastEvent";
+import { subscribe, unsubscribe, onError } from "lightning/empApi";
+import CURRENT_USER_ID from "@salesforce/user/Id";
 
 import getWorkspace from "@salesforce/apex/AgentToDoController.getWorkspace";
 import createTask from "@salesforce/apex/AgentToDoController.createTask";
@@ -40,6 +42,69 @@ export default class AgentToDoShell extends LightningElement {
   loadError = null;
 
   wiredResult;
+
+  /**
+   * 에이전트가 보내는 UI 명령 채널.
+   *
+   * 에이전트는 서버에서 실행되어 화면을 직접 바꿀 수 없고, Agent API 동기
+   * 응답에는 어떤 액션이 실행됐는지가 실리지 않습니다. 그래서 네비게이션
+   * 액션이 발행한 플랫폼 이벤트를 여기서 구독해 화면을 전환합니다.
+   */
+  uiCommandChannel = "/event/AgentToDo_UI_Command__e";
+  uiCommandSubscription = null;
+
+  connectedCallback() {
+    onError((error) => {
+      // 구독이 끊겨도 앱의 나머지 기능은 그대로 쓸 수 있어야 합니다.
+      // eslint-disable-next-line no-console
+      console.error("AgentToDo UI 명령 채널 오류", JSON.stringify(error));
+    });
+
+    subscribe(this.uiCommandChannel, -1, (message) => {
+      this.handleUiCommand(message);
+    })
+      .then((response) => {
+        this.uiCommandSubscription = response;
+      })
+      .catch(() => {
+        // 구독 실패 시 화면 전환만 동작하지 않고 나머지는 정상입니다.
+      });
+  }
+
+  disconnectedCallback() {
+    if (this.uiCommandSubscription) {
+      unsubscribe(this.uiCommandSubscription);
+      this.uiCommandSubscription = null;
+    }
+  }
+
+  /** 플랫폼 이벤트 수신 — 내 사용자에게 보낸 navigate 명령만 처리합니다. */
+  handleUiCommand(message) {
+    const payload =
+      message && message.data && message.data.payload
+        ? message.data.payload
+        : null;
+    if (!payload) {
+      return;
+    }
+    // 플랫폼 이벤트는 구독자 전원에게 전달되므로 대상 사용자를 반드시 확인합니다.
+    if (payload.Target_User_Id__c !== CURRENT_USER_ID) {
+      return;
+    }
+    if (payload.Command__c !== "navigate") {
+      return;
+    }
+
+    const screen = payload.Screen__c;
+    if (screen === "assistant") {
+      this.showAssistant = true;
+      return;
+    }
+    if (MENU_TITLES[screen]) {
+      this.activeMenu = screen;
+      this.selectedTask = null;
+    }
+  }
 
   @wire(getWorkspace)
   handleWorkspace(result) {
