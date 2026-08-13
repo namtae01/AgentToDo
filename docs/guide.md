@@ -816,11 +816,26 @@ Apex 콜아웃          ← callout:AgentToDo_Agent_API/einstein/...
   - Callback URL: `https://<도메인>/services/oauth2/callback` (흐름상 안 쓰지만 필수 입력)
   - **OAuth Scopes**: `Access the Salesforce API Platform (sfap_api)` ← **Agent API 필수**
     그리고 `Manage user data via APIs (api)`
+
+![External Client App 기본 정보](images/eca-settings-oauth.png)
+
 - **Policies 탭 → Edit** ← ⚠️ **먼저 Edit를 눌러야 편집됩니다**
   - **Enable Client Credentials Flow** 체크
   - → 체크해야 **Run As 필드가 나타납니다**
   - Run As = 일정을 소유한 사용자
 - **Settings 탭 → Consumer Key and Secret** 으로 두 값 복사
+
+여기서 두 번 막혔습니다.
+
+**첫째, 화면이 보기 모드였습니다.** 아래처럼 체크박스와 드롭다운이 전부 회색이면
+편집 모드가 아닙니다. **우측 상단 Edit를 먼저 눌러야** 합니다.
+
+![편집 모드가 아닌 Policies 화면](images/eca-policies-viewmode.png)
+
+**둘째, Run As 필드가 안 보였습니다.** 이 필드는 **Enable Client Credentials Flow를
+체크해야 나타납니다.** 체크 전에는 렌더링되지 않으므로, 안 보이는 게 정상입니다.
+
+![체크 후 나타난 Run As 필드](images/eca-policies-runas.png)
 
 설정이 실제로 반영됐는지는 org에서 확인할 수 있습니다:
 
@@ -882,10 +897,21 @@ Named Credential에서 인증 참조는 `parameterValue` 가 아니라 **자식 
 **Setup → Named Credentials → External Credentials 탭 → 해당 항목 → Principals**
 
 행 오른쪽 끝 **Actions 열의 ▼** → Edit
-(컬럼 헤더의 ∨ 는 "Wrap text/Clip text" 메뉴입니다. 헷갈리기 쉽습니다.)
+
+![Principals 행의 Actions 메뉴](images/extcred-principals-actions.png)
+
+> ⚠️ **컬럼 헤더의 ∨ 를 누르면 안 됩니다.** 위 그림에서 열린 "Wrap text / Clip text"
+> 메뉴가 그것인데, 열 표시 방식을 바꾸는 옵션이라 어느 표에나 있습니다.
+> 필요한 것은 **행 오른쪽 끝, Actions 열 아래의 ▼** 입니다.
 
 - Client ID = Consumer Key
 - Client Secret = Consumer Secret
+
+![Edit Principal 대화상자](images/extcred-edit-principal.png)
+
+이 대화상자에는 **Scope 입력란이 없습니다.** 스코프는 External Client App에 설정한
+값(`sfap_api`, `api`)을 따릅니다. `Principal Access` 가 비어 있는 것도 정상입니다 —
+권한 세트의 `externalCredentialPrincipalAccesses` 로 연결하기 때문입니다.
 
 > **비밀값을 메타데이터에 넣지 마세요.** UI로 입력하면 org에만 저장되고
 > 소스 트리에는 남지 않습니다.
@@ -981,8 +1007,12 @@ disconnectedCallback()   → endSession()     // 패널 닫을 때 정리
 ### 문제
 
 "받은 작업 화면으로 전환해줘" 라고 하면 에이전트가 거절합니다.
+
+![에이전트가 화면 전환 요청을 거절하는 화면](images/agent-refuses-navigation.png)
+
 **이건 버그가 아니라 설계대로 동작한 것입니다** — `out_of_scope` 가
-"일정 관리와 무관한 요청"으로 분류했습니다.
+"일정 관리와 무관한 요청"으로 분류했습니다. 6.2절에서 서브에이전트를 넷으로
+나눌 때 화면 제어를 범위에 넣지 않았기 때문입니다.
 
 그럼 어떻게 화면을 바꿀까요? 두 가지 벽이 있습니다.
 
