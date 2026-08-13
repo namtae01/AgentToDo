@@ -1,0 +1,85 @@
+<template>
+  <div class="scrim" onclick={handleClose}></div>
+
+  <div class="modal" role="dialog" aria-label="새 일정 등록">
+    <header class="modal__head">
+      <h2 class="modal__title">새 일정</h2>
+      <button class="close" type="button" title="닫기" onclick={handleClose}>
+        <lightning-icon
+          icon-name="utility:close"
+          size="x-small"
+          alternative-text="닫기"
+        ></lightning-icon>
+      </button>
+    </header>
+
+    <template lwc:if={hasError}>
+      <p class="error" role="alert">{error}</p>
+    </template>
+
+    <div class="modal__body">
+      <lightning-input
+        label="일정 제목"
+        data-field="subject"
+        value={form.subject}
+        onchange={handleChange}
+        required
+        max-length="120"
+        placeholder="예: 고객 제안서 최종 검토"
+      ></lightning-input>
+
+      <div class="row">
+        <lightning-input
+          type="date"
+          label="날짜"
+          data-field="date"
+          value={form.date}
+          onchange={handleChange}
+          required
+        ></lightning-input>
+        <lightning-input
+          type="time"
+          label="시간"
+          data-field="time"
+          value={form.time}
+          onchange={handleChange}
+        ></lightning-input>
+      </div>
+
+      <div class="row">
+        <lightning-combobox
+          label="우선순위"
+          data-field="priority"
+          value={form.priority}
+          options={priorityOptions}
+          onchange={handleChange}
+        ></lightning-combobox>
+        <lightning-combobox
+          label="카테고리"
+          data-field="category"
+          value={form.category}
+          options={categoryOptions}
+          onchange={handleChange}
+        ></lightning-combobox>
+      </div>
+
+      <lightning-textarea
+        label="설명"
+        data-field="description"
+        value={form.description}
+        onchange={handleChange}
+        max-length="4000"
+        placeholder="상세 내용을 입력하세요"
+      ></lightning-textarea>
+    </div>
+
+    <footer class="modal__actions">
+      <button class="btn btn--ghost" type="button" onclick={handleClose}>
+        취소
+      </button>
+      <button class="btn btn--primary" type="button" onclick={handleSave}>
+        등록
+      </button>
+    </footer>
+  </div>
+</template>

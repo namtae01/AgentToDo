@@ -1,0 +1,255 @@
+.calendar {
+  background: var(--atd-surface, #fff);
+  border: 1px solid var(--atd-line, #e2e8f0);
+  border-radius: var(--atd-radius, 14px);
+  box-shadow: var(--atd-shadow);
+  padding: 18px 20px 22px;
+}
+
+/* ── 헤더 ────────────────────────────────────────────────── */
+
+.calendar__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.calendar__nav {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.calendar__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  min-width: 130px;
+  text-align: center;
+}
+
+.nav-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--atd-line, #e2e8f0);
+  background: var(--atd-surface, #fff);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.nav-btn:hover {
+  border-color: var(--atd-blue-400, #3b82f6);
+  background: var(--atd-blue-050, #eff6ff);
+}
+
+.today-btn {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: 8px;
+  border: 1px solid var(--atd-line, #e2e8f0);
+  background: var(--atd-surface, #fff);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--atd-blue-600, #1d4ed8);
+  cursor: pointer;
+}
+
+.today-btn:hover {
+  background: var(--atd-blue-050, #eff6ff);
+  border-color: var(--atd-blue-400, #3b82f6);
+}
+
+/* ── 요일 ────────────────────────────────────────────────── */
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-bottom: 1px solid var(--atd-line, #e2e8f0);
+  padding-bottom: 8px;
+}
+
+.weekday {
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--atd-muted, #64748b);
+  padding-left: 8px;
+}
+
+.weekday--sun {
+  color: var(--atd-red, #dc2626);
+}
+
+.weekday--sat {
+  color: var(--atd-blue-500, #2563eb);
+}
+
+/* ── 격자 ────────────────────────────────────────────────── */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-auto-rows: minmax(96px, auto);
+}
+
+.cell {
+  border-right: 1px solid var(--atd-line, #e2e8f0);
+  border-bottom: 1px solid var(--atd-line, #e2e8f0);
+  padding: 8px 6px;
+  cursor: pointer;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.cell:nth-child(7n) {
+  border-right: 0;
+}
+
+.cell:hover {
+  background: var(--atd-blue-050, #eff6ff);
+}
+
+.cell--muted {
+  background: #fafbfc;
+}
+
+.cell--muted .cell__day {
+  color: #cbd5e1;
+}
+
+.cell--selected {
+  background: var(--atd-blue-050, #eff6ff);
+  box-shadow: inset 0 0 0 2px var(--atd-blue-500, #2563eb);
+  border-radius: 10px;
+}
+
+.cell__day {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--atd-ink, #0f172a);
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.cell__day--sun {
+  color: var(--atd-red, #dc2626);
+}
+
+.cell__day--sat {
+  color: var(--atd-blue-500, #2563eb);
+}
+
+/* 오늘 날짜는 파란 원으로 표시합니다. */
+.cell__day--today {
+  background: var(--atd-blue-600, #1d4ed8);
+  color: #fff;
+  border-radius: 50%;
+}
+
+.cell__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+/* ── 일정 칩 ─────────────────────────────────────────────── */
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  border: 0;
+  border-radius: 6px;
+  padding: 3px 6px;
+  font-size: 0.71rem;
+  cursor: pointer;
+  text-align: left;
+  min-width: 0;
+  background: var(--atd-teal-bg, #ccfbf1);
+  color: #115e59;
+}
+
+.chip__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--atd-teal, #0d9488);
+}
+
+.chip__text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 색상 의미: 청록=일반 업무, 노랑=높은 우선순위, 빨강=기한 초과, 보라=회의 */
+.chip--default {
+  background: var(--atd-teal-bg, #ccfbf1);
+  color: #115e59;
+}
+
+.chip--default .chip__dot {
+  background: var(--atd-teal, #0d9488);
+}
+
+.chip--high {
+  background: var(--atd-amber-bg, #fef3c7);
+  color: #92400e;
+}
+
+.chip--high .chip__dot {
+  background: var(--atd-amber, #d97706);
+}
+
+.chip--overdue {
+  background: var(--atd-red-bg, #fee2e2);
+  color: #991b1b;
+}
+
+.chip--overdue .chip__dot {
+  background: var(--atd-red, #dc2626);
+}
+
+.chip--meeting {
+  background: var(--atd-purple-bg, #ede9fe);
+  color: #5b21b6;
+}
+
+.chip--meeting .chip__dot {
+  background: var(--atd-purple, #7c3aed);
+}
+
+.chip--done .chip__text {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* 검색어에 걸린 일정은 파란 테두리로 강조합니다. */
+.chip--hit {
+  box-shadow: 0 0 0 2px var(--atd-blue-500, #2563eb);
+}
+
+.chip-more {
+  border: 0;
+  background: transparent;
+  color: var(--atd-muted, #64748b);
+  font-size: 0.7rem;
+  text-align: left;
+  padding: 2px 6px;
+  cursor: pointer;
+}
+
+.chip-more:hover {
+  color: var(--atd-blue-600, #1d4ed8);
+}

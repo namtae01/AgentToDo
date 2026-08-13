@@ -1,0 +1,184 @@
+.scrim {
+  position: fixed;
+  inset: 0;
+  background: rgba(12, 35, 64, 0.38);
+  z-index: 40;
+}
+
+.drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 92vw);
+  background: var(--atd-surface, #fff);
+  box-shadow: -12px 0 32px rgba(15, 23, 42, 0.16);
+  z-index: 41;
+  padding: 22px 24px 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* 상단 색 띠로 일정의 성격(기한 초과·우선순위·회의)을 즉시 알립니다. */
+.accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+}
+
+.accent--default {
+  background: var(--atd-teal, #0d9488);
+}
+
+.accent--high {
+  background: var(--atd-amber, #d97706);
+}
+
+.accent--overdue {
+  background: var(--atd-red, #dc2626);
+}
+
+.accent--meeting {
+  background: var(--atd-purple, #7c3aed);
+}
+
+.drawer__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.drawer__number {
+  margin: 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--atd-blue-600, #1d4ed8);
+}
+
+.drawer__title {
+  margin: 6px 0 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--atd-line, #e2e8f0);
+  background: var(--atd-surface, #fff);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+
+.close:hover {
+  background: #f1f5f9;
+}
+
+.facts {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+  padding: 16px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+
+.fact {
+  min-width: 0;
+}
+
+.fact dt {
+  font-size: 0.7rem;
+  color: var(--atd-muted, #64748b);
+  margin-bottom: 3px;
+}
+
+.fact dd {
+  margin: 0;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--atd-ink, #0f172a);
+  word-break: break-word;
+}
+
+.block {
+  border-top: 1px solid var(--atd-line, #e2e8f0);
+  padding-top: 16px;
+}
+
+.block__title {
+  margin: 0 0 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--atd-muted, #64748b);
+}
+
+.block__body {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.block--agent {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 16px;
+}
+
+.block--agent .block__title {
+  grid-column: 1 / -1;
+}
+
+.drawer__actions {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.btn {
+  height: 42px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--ghost {
+  background: var(--atd-surface, #fff);
+  border-color: var(--atd-line, #e2e8f0);
+  color: var(--atd-ink, #0f172a);
+}
+
+.btn--ghost:hover {
+  border-color: var(--atd-blue-400, #3b82f6);
+  color: var(--atd-blue-600, #1d4ed8);
+}
+
+.btn--primary {
+  background: var(--atd-blue-600, #1d4ed8);
+  color: #fff;
+}
+
+.btn--primary:hover:not(:disabled) {
+  background: var(--atd-blue-500, #2563eb);
+}
+
+.btn--primary:disabled {
+  background: #cbd5e1;
+  cursor: default;
+}

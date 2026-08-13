@@ -1,0 +1,201 @@
+.sidebar {
+  background: var(--atd-navy-900, #0c2340);
+  color: #e2e8f0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 22px 16px 20px;
+  gap: 24px;
+  position: sticky;
+  top: 0;
+}
+
+/* ── 브랜드 ──────────────────────────────────────────────── */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 6px;
+}
+
+.brand__mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: var(--atd-blue-500, #2563eb);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+
+.brand__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+
+.brand__text strong {
+  font-size: 1.05rem;
+  color: #fff;
+}
+
+.brand__text small {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+/* ── 메뉴 ────────────────────────────────────────────────── */
+
+.nav {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.nav-group__label {
+  margin: 0 0 8px 10px;
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  color: #64748b;
+  font-weight: 700;
+}
+
+.nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  margin-bottom: 2px;
+  border: 0;
+  border-left: 3px solid transparent;
+  border-radius: 10px;
+  background: transparent;
+  color: #cbd5e1;
+  font-size: 0.88rem;
+  cursor: pointer;
+  text-align: left;
+}
+
+.nav-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+}
+
+/* 선택된 메뉴는 좌측 강조선 + 배경으로 표시합니다. */
+.nav-item--active {
+  background: rgba(37, 99, 235, 0.22);
+  border-left-color: var(--atd-blue-400, #3b82f6);
+  color: #fff;
+  font-weight: 600;
+}
+
+.nav-item__label {
+  flex: 1;
+}
+
+.nav-item__count {
+  min-width: 24px;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+}
+
+.nav-item--active .nav-item__count {
+  background: var(--atd-blue-500, #2563eb);
+  color: #fff;
+}
+
+/* ── 하단 ────────────────────────────────────────────────── */
+
+.sidebar__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.progress-card {
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 14px;
+}
+
+.progress-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 0.76rem;
+  color: #cbd5e1;
+}
+
+.progress-card__head strong {
+  font-size: 1.15rem;
+  color: #fff;
+}
+
+.progress-track {
+  margin: 10px 0 8px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--atd-blue-400, #3b82f6);
+  transition: width 0.3s ease;
+}
+
+.progress-card__note {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.user__avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.user__text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.3;
+}
+
+.user__text strong {
+  font-size: 0.84rem;
+  color: #fff;
+}
+
+.user__text small {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}

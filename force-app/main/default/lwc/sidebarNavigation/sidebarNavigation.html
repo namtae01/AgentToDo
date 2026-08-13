@@ -1,0 +1,60 @@
+<template>
+  <nav class="sidebar">
+    <div class="brand">
+      <span class="brand__mark">AT</span>
+      <span class="brand__text">
+        <strong>AgentToDo</strong>
+        <small>AI Schedule Workspace</small>
+      </span>
+    </div>
+
+    <div class="nav">
+      <template for:each={sections} for:item="section">
+        <div key={section.key} class="nav-group">
+          <p class="nav-group__label">{section.label}</p>
+          <template for:each={section.items} for:item="item">
+            <button
+              key={item.menu}
+              type="button"
+              class={item.itemClass}
+              data-menu={item.menu}
+              onclick={handleClick}
+            >
+              <lightning-icon
+                icon-name={item.icon}
+                size="x-small"
+                variant="inverse"
+                alternative-text={item.label}
+              ></lightning-icon>
+              <span class="nav-item__label">{item.label}</span>
+              <template lwc:if={item.showCount}>
+                <span class="nav-item__count">{item.count}</span>
+              </template>
+            </button>
+          </template>
+        </div>
+      </template>
+    </div>
+
+    <div class="sidebar__footer">
+      <div class="progress-card">
+        <div class="progress-card__head">
+          <span>이번 주 완료율</span>
+          <strong>{completionRate}%</strong>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style={progressStyle}></div>
+        </div>
+        <small class="progress-card__note">{progressLabel}</small>
+      </div>
+
+      <div class="user">
+        <span class="user__avatar">{initials}</span>
+        <span class="user__text">
+          <strong>{userName}</strong>
+          <small>{userTitle}</small>
+        </span>
+      </div>
+    </div>
+  </nav>
+</template>

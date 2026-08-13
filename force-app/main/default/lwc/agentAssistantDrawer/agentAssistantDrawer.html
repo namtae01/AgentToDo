@@ -1,0 +1,103 @@
+<template>
+  <div class="scrim" onclick={handleClose}></div>
+
+  <aside class="panel" role="dialog" aria-label="AgentToDo Assistant">
+    <header class="panel__head">
+      <div class="identity">
+        <span class="identity__mark">AI</span>
+        <span class="identity__text">
+          <strong>AgentToDo Assistant</strong>
+          <small class={statusClass}>{statusText}</small>
+        </span>
+      </div>
+      <button class="close" type="button" title="닫기" onclick={handleClose}>
+        <lightning-icon
+          icon-name="utility:close"
+          size="x-small"
+          variant="inverse"
+          alternative-text="닫기"
+        ></lightning-icon>
+      </button>
+    </header>
+
+    <div class="quick">
+      <template for:each={quickPrompts} for:item="p">
+        <button
+          key={p.key}
+          type="button"
+          class="quick__btn"
+          data-key={p.key}
+          disabled={isBusy}
+          onclick={handleQuick}
+        >
+          {p.label}
+        </button>
+      </template>
+    </div>
+
+    <template lwc:if={hasError}>
+      <div class="notice notice--error" role="alert">
+        <p class="notice__text">{connectError}</p>
+        <button type="button" class="notice__retry" onclick={handleRetry}>
+          다시 연결
+        </button>
+      </div>
+    </template>
+
+    <div class="thread">
+      <template for:each={messages} for:item="m">
+        <div key={m.id} class="turn">
+          <p class={m.cssClass}>{m.text}</p>
+
+          <template lwc:if={m.hasActions}>
+            <template for:each={m.actions} for:item="a">
+              <article key={a.key} class="action-card">
+                <p class="action-card__head">
+                  <strong>{a.name}</strong>
+                  <span class="action-card__state">· 실행 완료</span>
+                </p>
+                <template lwc:if={a.detail}>
+                  <p class="action-card__body">{a.detail}</p>
+                </template>
+              </article>
+            </template>
+          </template>
+        </div>
+      </template>
+
+      <template lwc:if={isBusy}>
+        <div class="typing">
+          <span class="typing__dot"></span>
+          <span class="typing__dot"></span>
+          <span class="typing__dot"></span>
+        </div>
+      </template>
+    </div>
+
+    <footer class="composer">
+      <input
+        type="text"
+        class="composer__input"
+        placeholder="예: 내일 오전 10시에 내 검토 일정 추가해줘"
+        value={draft}
+        disabled={isBusy}
+        oninput={handleDraftChange}
+        onkeydown={handleKeyDown}
+      />
+      <button
+        class="composer__send"
+        type="button"
+        title="보내기"
+        disabled={isDisabled}
+        onclick={handleSend}
+      >
+        <lightning-icon
+          icon-name="utility:send"
+          size="x-small"
+          variant="inverse"
+          alternative-text="보내기"
+        ></lightning-icon>
+      </button>
+    </footer>
+  </aside>
+</template>

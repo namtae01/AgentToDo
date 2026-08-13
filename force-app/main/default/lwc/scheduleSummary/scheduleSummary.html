@@ -1,0 +1,16 @@
+<template>
+  <div class="tiles">
+    <template for:each={tiles} for:item="tile">
+      <article key={tile.key} class="tile">
+        <span class={tile.badgeClass}>{tile.index}</span>
+        <div class="tile__body">
+          <p class="tile__label">{tile.label}</p>
+          <p class="tile__value">
+            <strong>{tile.value}</strong>
+            <span class="tile__unit">{tile.unit}</span>
+          </p>
+        </div>
+      </article>
+    </template>
+  </div>
+</template>
