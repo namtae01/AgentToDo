@@ -20,9 +20,10 @@
 6. [3단계 · Agentforce 에이전트](#6-3단계--agentforce-에이전트)
 7. [4단계 · 앱에서 에이전트 호출하기 (Agent API)](#7-4단계--앱에서-에이전트-호출하기-agent-api)
 8. [5단계 · 에이전트가 화면을 제어하게 하기](#8-5단계--에이전트가-화면을-제어하게-하기)
-9. [함정 모음 — 내가 빠졌던 곳](#9-함정-모음--내가-빠졌던-곳)
-10. [검증하는 습관](#10-검증하는-습관)
-11. [다음에 해볼 것](#11-다음에-해볼-것)
+9. [수정하고 반영하기](#9-수정하고-반영하기)
+10. [함정 모음 — 내가 빠졌던 곳](#10-함정-모음--내가-빠졌던-곳)
+11. [검증하는 습관](#11-검증하는-습관)
+12. [다음에 해볼 것](#12-다음에-해볼-것)
 
 ---
 
@@ -1115,7 +1116,137 @@ disconnectedCallback() {
 
 ---
 
-## 9. 함정 모음 — 내가 빠졌던 곳
+## 9. 수정하고 반영하기
+
+만들고 나면 고치게 됩니다. 여기서 헷갈리는 것은 **"어디까지 다시 해야 하는가"** 입니다.
+
+### 로컬 파일을 고쳐도 org는 바뀌지 않습니다
+
+당연해 보이지만 실제로 자주 헷갈립니다.
+
+```
+D:\...\AgentToDoActionService.cls   ← 여기를 고쳐도
+                                       ↕  연결이 없습니다
+s-test org 의 Apex 클래스            ← 여기는 그대로
+```
+
+파일 저장과 배포는 **완전히 별개**입니다. `Ctrl+S` 는 디스크에만 씁니다.
+
+### 이 org는 소스 추적이 꺼져 있습니다
+
+```bash
+sf project deploy preview -o s-test
+# => This org does not have source tracking.
+```
+
+스크래치 org라면 org가 "무엇이 바뀌었는지"를 추적해 주므로 `sf project deploy start`
+만 쳐도 변경분만 올라갑니다. **하지만 Developer Edition·Sandbox는 추적이 없습니다.**
+그래서 **무엇을 배포할지 직접 지정**해야 합니다.
+
+```bash
+# 확인 방법
+node -e 'const j=require(require("path").join(process.env.USERPROFILE,".sfdx","<사용자명>.json")); console.log(j.tracksSource)'
+```
+
+### 배포 명령
+
+```bash
+# 클래스 하나만
+sf project deploy start -o s-test \
+  --source-dir force-app/main/default/classes/AgentToDoActionService.cls
+
+# 폴더 단위 (보통 이렇게 씁니다)
+sf project deploy start -o s-test --source-dir force-app/main/default/classes
+
+# 배포 후 테스트
+sf apex run test -o s-test --class-names AgentToDoActionsTest --result-format human
+```
+
+> **습관**: 중요한 배포는 `--dry-run` 을 먼저 붙여 보세요. 오류 메시지는 같지만
+> org를 건드리지 않습니다.
+
+### 저장하면 자동 배포되게 하려면
+
+**VS Code + Salesforce Extension Pack** 을 쓰면 됩니다.
+
+```
+설정 → "Deploy On Save" 검색
+→ Salesforce Core: Push-or-deploy-on-save: Enabled 체크
+```
+
+편하지만 **저장할 때마다 org가 바뀝니다.** 공유 org에서는 켜지 마세요.
+
+### ⚠️ 무엇을 고쳤느냐에 따라 다시 할 일이 달라집니다
+
+이게 이 프로젝트에서 가장 헷갈리는 부분입니다.
+
+| 고친 것                                           | 배포 | `.agent` 수정 | 재게시+활성화 | 브라우저 새로고침 |
+| ------------------------------------------------- | :--: | :-----------: | :-----------: | :---------------: |
+| Apex 메서드 **내부 로직** (SOQL 조건, 정렬, 문구) |  ●   |               |               |                   |
+| `@InvocableVariable` **추가·삭제·이름 변경**      |  ●   |       ●       |       ●       |                   |
+| `@InvocableMethod` 의 `description`               |  ●   |               |       ●       |                   |
+| `.agent` 의 지시문·서브에이전트                   |      |       ●       |       ●       |                   |
+| LWC (`.js` / `.html` / `.css`)                    |  ●   |               |               |         ●         |
+| 커스텀 오브젝트 필드                              |  ●   |  경우에 따라  |  경우에 따라  |         ●         |
+
+#### 왜 이렇게 갈리는가
+
+**Action의 입출력 스키마는 게시 시점에 컴파일되어 굳습니다.** 게시할 때 Salesforce가
+`.agent` 를 읽어 `GenAiPlannerBundle` 을 만들고, 그 안에 액션별 입력·출력 스키마가
+JSON으로 박힙니다.
+
+```
+force-app/main/default/genAiPlannerBundles/AgentToDo_Svc_Assistant_v3/
+└─ localActions/schedule_inquiry_.../list_todos_.../
+   ├─ input/schema.json      ← 게시 시점에 굳은 스키마
+   └─ output/schema.json
+```
+
+그래서 Apex의 **필드를 바꾸면** 이 스키마와 어긋납니다. 배포만 하고 재게시하지
+않으면 에이전트는 옛 스키마를 계속 씁니다.
+
+**`description` 도 재게시가 필요합니다.** LLM은 이 설명을 읽고 "지금 이 액션을
+써야 하나"를 판단합니다. 즉 설명은 주석이 아니라 **동작에 영향을 주는 코드**입니다.
+
+#### 재게시 절차
+
+```bash
+sf agent validate authoring-bundle --json --api-name AgentToDo_Svc_Assistant
+sf project deploy start -o s-test --source-dir force-app/main/default/aiAuthoringBundles --json
+sf agent publish authoring-bundle --json --api-name AgentToDo_Svc_Assistant
+sf agent activate --json --api-name AgentToDo_Svc_Assistant
+```
+
+게시할 때마다 **영구 버전 번호**가 하나씩 올라갑니다. 개발 중에 매번 게시하지 말고
+`sf agent preview start --use-live-actions --authoring-bundle ...` 로 반복하세요.
+프리뷰는 게시 없이 로컬 번들을 실제 액션과 함께 돌려 봅니다.
+
+### LWC를 고쳤으면 반드시 새로고침
+
+배포가 성공해도 브라우저에는 **옛 버전이 그대로 뜹니다.** Lightning이 컴포넌트를
+캐시하기 때문입니다.
+
+이 프로젝트에서 두 번 걸렸고, 한 번은 화면 전환 기능이 "안 되는 줄" 알았습니다.
+에이전트는 "전환했습니다"라고 답하는데 화면은 그대로였습니다 — 새로고침하니
+바로 동작했습니다.
+
+> **증상**: 배포는 성공했는데 화면이 그대로다 → **먼저 새로고침해 보세요.**
+
+### 고친 뒤 확인 순서
+
+```
+1. sf project deploy start           배포됐는가
+2. sf apex run test                  기존 동작이 안 깨졌는가
+3. REST 로 Action 직접 호출          액션 자체가 맞게 도는가
+4. sf agent preview + 트레이스       에이전트가 그 액션을 고르는가
+5. 브라우저에서 실제 조작            사용자가 보는 화면이 맞는가
+```
+
+한 번에 5번까지 가지 마세요. 어디서 깨졌는지 알 수 없습니다.
+
+---
+
+## 10. 함정 모음 — 내가 빠졌던 곳
 
 시간을 가장 많이 잡아먹은 순서대로 적었습니다.
 
@@ -1211,7 +1342,7 @@ void f(List<X> into)   // ❌ 예약어
 
 ---
 
-## 10. 검증하는 습관
+## 11. 검증하는 습관
 
 이 프로젝트에서 실제로 도움이 된 것들입니다.
 
@@ -1259,7 +1390,7 @@ Apex 단위 테스트  →  REST 직접 호출  →  에이전트 프리뷰 + �
 
 ---
 
-## 11. 다음에 해볼 것
+## 12. 다음에 해볼 것
 
 ### 지금 남아 있는 한계
 
