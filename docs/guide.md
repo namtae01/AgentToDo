@@ -21,9 +21,11 @@
 7. [4단계 · 앱에서 에이전트 호출하기 (Agent API)](#7-4단계--앱에서-에이전트-호출하기-agent-api)
 8. [5단계 · 에이전트가 화면을 제어하게 하기](#8-5단계--에이전트가-화면을-제어하게-하기)
 9. [수정하고 반영하기](#9-수정하고-반영하기)
-10. [함정 모음 — 내가 빠졌던 곳](#10-함정-모음--내가-빠졌던-곳)
-11. [검증하는 습관](#11-검증하는-습관)
-12. [다음에 해볼 것](#12-다음에-해볼-것)
+10. [무엇을 고치려면 어디를 보나](#10-무엇을-고치려면-어디를-보나)
+11. [디버깅 — 문제가 생겼을 때](#11-디버깅--문제가-생겼을-때)
+12. [함정 모음 — 내가 빠졌던 곳](#12-함정-모음--내가-빠졌던-곳)
+13. [검증하는 습관](#13-검증하는-습관)
+14. [다음에 해볼 것](#14-다음에-해볼-것)
 
 ---
 
@@ -1246,7 +1248,296 @@ sf agent activate --json --api-name AgentToDo_Svc_Assistant
 
 ---
 
-## 10. 함정 모음 — 내가 빠졌던 곳
+## 10. 무엇을 고치려면 어디를 보나
+
+"이걸 바꾸고 싶은데 어느 파일이지?" 를 위한 지도입니다.
+
+### 데이터
+
+| 하고 싶은 것                  | 고칠 곳                                                                                                                                                                                              |        재게시         |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :-------------------: |
+| 일정에 **필드 추가**          | `objects/AgentToDo_Task__c/fields/` 새 파일<br>→ `permissionsets/AgentToDo_User` 에 FLS 추가<br>→ `AgentToDoController` 의 `TaskDTO` + SOQL<br>→ 화면에 표시하려면 `decorateTask()` 와 해당 컴포넌트 | 에이전트가<br>쓸 때만 |
+| 상태·우선순위 **선택지 변경** | 해당 `fields/*.field-meta.xml` 의 `valueSet`<br>→ `AgentToDoActionService.normalizePriority()` / `normalizeCategory()`                                                                               |           ●           |
+| **시드 데이터**               | `scripts/apex/seed_agenttodo_tasks.apex`                                                                                                                                                             |                       |
+| 기한 초과 **판정 규칙**       | `fields/Is_Overdue__c.field-meta.xml` 의 `formula`                                                                                                                                                   |                       |
+
+### 화면
+
+| 하고 싶은 것                        | 고칠 곳                                                                                                                                                              |
+| ----------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **색상 규칙** (어떤 일정이 무슨 색) | `lwc/agentToDoUtils/agentToDoUtils.js` 의 `toneOf()` — 여기 한 곳만                                                                                                  |
+| 색상 **값** 자체                    | `lwc/agentToDoShell/agentToDoShell.css` 의 `:host` 토큰 (`--atd-*`)                                                                                                  |
+| **메뉴 추가·삭제**                  | `lwc/sidebarNavigation/sidebarNavigation.js` 의 `SECTIONS`<br>→ `lwc/agentToDoShell/agentToDoShell.js` 의 `MENU_TITLES`<br>→ `agentToDoUtils.js` 의 `filterByMenu()` |
+| 메뉴별 **필터 조건**                | `agentToDoUtils.js` 의 `filterByMenu()`                                                                                                                              |
+| 상단 **통계 타일**                  | `lwc/scheduleSummary/scheduleSummary.js` 의 `tiles`<br>→ 값 계산은 `AgentToDoController.summarize()`                                                                 |
+| 캘린더 셀에 보이는 **일정 개수**    | `lwc/agentToDoCalendar/agentToDoCalendar.js` 의 `MAX_CHIPS_PER_DAY`                                                                                                  |
+| 상세 드로어 **표시 항목**           | `lwc/taskDetailDrawer/`                                                                                                                                              |
+| 새 일정 **입력 폼**                 | `lwc/taskEditorModal/`                                                                                                                                               |
+
+> ⚠️ 색상 판정을 컴포넌트마다 따로 하지 마세요. `toneOf()` 한 곳에 모아 둔
+> 이유가 있습니다 — 여러 곳에서 판정하면 반드시 어긋납니다.
+
+### 에이전트
+
+| 하고 싶은 것                  | 고칠 곳                                                               | 재게시 |
+| ----------------------------- | --------------------------------------------------------------------- | :----: |
+| **말투·인사말·오류 문구**     | `.agent` 의 `system:` 블록                                            |   ●    |
+| 어떤 요청을 **어디로 보낼지** | `.agent` 의 `start_agent` 지시문                                      |   ●    |
+| 서브에이전트의 **행동 지시**  | 해당 `subagent` 의 `reasoning: instructions:`                         |   ●    |
+| **확인 게이트** 강도 조절     | `subagent schedule_change` 의 instructions                            |   ●    |
+| **빠른 실행 버튼** 문구       | `lwc/agentAssistantDrawer/agentAssistantDrawer.js` 의 `QUICK_PROMPTS` |        |
+| Action **내부 로직**          | `classes/AgentToDoActionService.cls`                                  |        |
+| Action **입출력 필드**        | Action 클래스 + `.agent` 의 `inputs:`/`outputs:` **양쪽**             |   ●    |
+| LLM이 **언제 이 액션을 쓸지** | `@InvocableMethod` 의 `description` + `.agent` 의 `description`       |   ●    |
+
+`.agent` 파일 위치:
+
+```
+force-app/main/default/aiAuthoringBundles/AgentToDo_Svc_Assistant/AgentToDo_Svc_Assistant.agent
+```
+
+### 새 Agent Action 추가하기
+
+가장 자주 하게 될 작업이라 순서를 적어 둡니다.
+
+```
+1. classes/AgentToDoXxxAction.cls 생성
+   - @InvocableMethod 는 클래스당 하나
+   - Request / Result 내부 클래스에 @InvocableVariable
+   - 공용 로직은 AgentToDoActionService 에
+
+2. classes/AgentToDoXxxAction.cls-meta.xml 생성 (apiVersion 66.0)
+
+3. permissionsets/AgentToDo_User 에 classAccesses 추가
+   ← 빼먹으면 게시가 "User doesn't have access to agent" 로 실패
+
+4. .agent 의 해당 subagent 에
+   - reasoning: actions: 에 호출 선언
+   - actions: 에 정의 (inputs / outputs 모두 필수)
+
+5. 배포 → validate → 재게시 → 활성화
+```
+
+### 화면 전환 대상 추가하기
+
+```
+1. classes/AgentToDoNavigateAction.cls 의 SCREEN_LABELS 에 화면 키 추가
+2. 같은 파일 ALIASES 에 한국어 표현 추가
+3. lwc/agentToDoShell/agentToDoShell.js 의 handleUiCommand() 가
+   그 키를 처리하는지 확인 (MENU_TITLES 에 있으면 자동)
+4. 배포 → 재게시 (Action 설명이 바뀌면)
+```
+
+---
+
+## 11. 디버깅 — 문제가 생겼을 때
+
+계층마다 로그가 나오는 곳이 다릅니다. **어느 계층인지 먼저 좁히세요.**
+
+```
+브라우저 콘솔     ← LWC 오류, empApi 구독 실패
+Apex 디버그 로그  ← 컨트롤러·Action 내부, 콜아웃 요청/응답
+에이전트 트레이스 ← 라우팅, 액션 선택, LLM 추론
+HTTP 상태 코드    ← Agent API 계층
+```
+
+### Apex 디버그 로그
+
+**⚠️ 먼저 로그가 켜져 있는지 확인하세요.** 이 프로젝트에서도 TraceFlag가
+만료돼 로그가 0건인 상태였습니다.
+
+```bash
+# 저장된 로그 확인
+sf apex list log -o s-test
+# => 0 건이면 아래를 실행
+```
+
+로그 켜기 (Setup UI):
+
+```
+Setup → 디버그 로그 (Debug Logs) → 새로 만들기
+→ 추적 엔터티: 사용자 → 본인 선택
+→ 디버그 수준: SFDC_DevConsole 또는 새로 만들기 (Apex Code = DEBUG 이상)
+```
+
+로그 보기:
+
+```bash
+# 실시간으로 흘려보기 — 다른 창에서 앱을 조작하면서 봅니다
+sf apex tail log -o s-test
+
+# 가장 최근 로그 한 건
+sf apex get log -o s-test --number 1
+
+# 특정 로그
+sf apex list log -o s-test
+sf apex get log -o s-test --log-id <ID>
+```
+
+코드에 로그 심기:
+
+```apex
+System.debug('조회 건수: ' + rows.size());
+System.debug(LoggingLevel.ERROR, '콜아웃 응답: ' + res.getStatusCode() + ' ' + res.getBody());
+```
+
+> **팁**: 콜아웃 디버깅에는 `LoggingLevel.ERROR` 를 쓰세요. 로그가 길어지면
+> DEBUG 레벨은 잘려 나가는데 ERROR 는 남습니다.
+
+**익명 Apex로 찍는 게 더 빠를 때가 많습니다.** 로그 설정 없이 바로 결과가 나옵니다.
+
+```bash
+sf apex run -o s-test -f scripts/apex/probe_agent_api_session.apex
+# --json 으로 실행하면 logs 필드에 USER_DEBUG 가 그대로 담겨 옵니다
+```
+
+이 프로젝트의 `scripts/apex/probe_*.apex` 들이 그 용도로 만든 것입니다.
+
+### LWC 디버깅
+
+```
+브라우저 → F12 → Console
+```
+
+**Lightning 디버그 모드를 켜면** 컴포넌트 이름이 그대로 보이고 소스맵이 살아납니다.
+
+```
+Setup → 디버그 모드 (Debug Mode) → 본인 사용자 활성화
+```
+
+코드에 로그 심기:
+
+```js
+// eslint 가 no-console 을 잡으므로 주석이 필요합니다
+// eslint-disable-next-line no-console
+console.log("워크스페이스 응답", JSON.stringify(data));
+```
+
+**Apex 호출 오류는 이렇게 확인합니다:**
+
+```js
+} catch (error) {
+  // eslint-disable-next-line no-console
+  console.error("Apex 오류", JSON.stringify(error));
+}
+```
+
+`error.body.message` 에 Apex 의 `AuraHandledException` 메시지가 들어옵니다.
+
+> **화면이 안 바뀌면 새로고침부터.** Lightning 이 컴포넌트를 캐시합니다.
+> 이 프로젝트에서 두 번 걸렸습니다.
+
+### 에이전트 디버깅 — 트레이스
+
+**에이전트의 답변은 근거가 아닙니다.** 액션을 호출하지 않고도 그럴듯한 말을
+만들 수 있습니다. 반드시 트레이스를 보세요.
+
+```bash
+sf agent preview start --json --use-live-actions --authoring-bundle AgentToDo_Svc_Assistant
+sf agent preview send --json --authoring-bundle AgentToDo_Svc_Assistant \
+  --session-id <SESSION_ID> -u "오늘 일정을 브리핑해줘"
+```
+
+트레이스 위치:
+
+```
+.sfdx/agents/AgentToDo_Svc_Assistant/sessions/<세션ID>/traces/<planId>.json
+```
+
+`planId` 는 응답 JSON 의 `messages[0].planId` 입니다.
+
+읽을 때 이 세 가지만 보면 됩니다:
+
+| 스텝               | 무엇을 알 수 있나                                      |
+| ------------------ | ------------------------------------------------------ |
+| `TransitionStep`   | 어느 서브에이전트로 갔는가 (`from_agent` → `to_agent`) |
+| **`FunctionStep`** | **액션이 실제로 실행됐는가** + 입력값 + 출력값         |
+| `LLMStep`          | LLM 이 무엇을 보고 판단했는가                          |
+
+추출 예:
+
+```bash
+node -e '
+const t=require("./.sfdx/agents/AgentToDo_Svc_Assistant/sessions/<세션ID>/traces/<planId>.json");
+const walk=n=>{ if(Array.isArray(n))return n.forEach(walk);
+  if(n&&typeof n==="object"){ const k=n.stepType||n.type;
+    if(k==="TransitionStep"&&n.data) console.log("라우팅:",n.data.from_agent,"→",n.data.to_agent);
+    if(k==="FunctionStep"&&n.function) console.log("액션:",n.function.name,JSON.stringify(n.function.input));
+    Object.values(n).forEach(walk); } };
+walk(t);'
+```
+
+**증상별 해석:**
+
+| 증상                      | 트레이스에서 볼 것                                                             |
+| ------------------------- | ------------------------------------------------------------------------------ |
+| 엉뚱한 답을 함            | `FunctionStep` 이 없다 → 액션을 안 부르고 지어냈다                             |
+| 다른 액션을 부름          | `TransitionStep` 확인 → 라우팅이 틀렸다. `start_agent` 지시문 수정             |
+| 액션은 맞는데 결과가 이상 | `FunctionStep` 의 `input` 확인 → LLM 이 잘못된 값을 넣었다. `description` 수정 |
+| 액션이 실패               | `output` 의 `__action_execution_status__` 확인                                 |
+
+### Agent API 디버깅 — 상태 코드
+
+익명 Apex로 직접 호출하면 원인이 바로 좁혀집니다.
+
+```bash
+sf apex run -o s-test -f scripts/apex/probe_agent_api_session.apex
+```
+
+| 코드                                  | 원인                           | 확인할 것                                                              |
+| ------------------------------------- | ------------------------------ | ---------------------------------------------------------------------- |
+| **401**                               | 인증 실패                      | External Credential 의 Consumer Key/Secret, 권한 세트의 주체 접근 권한 |
+| **412**                               | 에이전트 설정 로드 실패        | `.agent` 의 액션에 `inputs`/`outputs` 가 다 있는가                     |
+| **400** `Empty force-config endpoint` | `instanceConfig.endpoint` 누락 | 요청 본문                                                              |
+| **423**                               | 세션 잠김                      | 같은 세션에 동시 요청 — 순차 호출로                                    |
+| **404**                               | 잘못된 경로                    | 에이전트 Id, API 버전                                                  |
+
+### 플랫폼 이벤트 디버깅 (화면 전환)
+
+화면이 안 바뀌면 **어느 쪽이 끊겼는지** 좁힙니다.
+
+**① 발행됐는가** — 익명 Apex로 직접 발행해 봅니다.
+
+```apex
+EventBus.publish(new AgentToDo_UI_Command__e(
+    Command__c = 'navigate', Screen__c = 'received',
+    Target_User_Id__c = UserInfo.getUserId()
+));
+```
+
+이걸로 화면이 바뀌면 **구독은 정상**이고 에이전트 쪽 문제입니다.
+
+**② 구독됐는가** — 브라우저 콘솔에서 확인합니다.
+
+```js
+// agentToDoShell.js 의 subscribe 콜백에 임시로 추가
+// eslint-disable-next-line no-console
+console.log("UI 명령 수신", JSON.stringify(message?.data?.payload));
+```
+
+아무것도 안 찍히면 구독 실패입니다. 권한 세트에 플랫폼 이벤트 `allowRead` 가
+있는지 확인하세요.
+
+**③ 대상 사용자가 맞는가** — `Target_User_Id__c` 가 현재 로그인 사용자와
+다르면 조용히 무시됩니다. 의도된 동작이지만 디버깅 중에는 헷갈립니다.
+
+### 배포가 실패할 때
+
+```bash
+# 오류 메시지 전문 보기
+sf project deploy start -o s-test --source-dir <경로> --json
+```
+
+`--json` 없이 실행하면 메시지가 잘릴 수 있습니다. `componentFailures[].problem`
+에 실제 원인이 들어 있습니다.
+
+> **오류 메시지를 스키마 탐색에 쓰세요.** 문서에 없는 메타데이터 형식은
+> 일부러 틀린 값으로 `--dry-run` 해서 서버가 유효한 값을 알려주게 하면 됩니다.
+> External Credential 스키마를 이 방법으로 알아냈습니다.
+
+---
+
+## 12. 함정 모음 — 내가 빠졌던 곳
 
 시간을 가장 많이 잡아먹은 순서대로 적었습니다.
 
@@ -1342,7 +1633,7 @@ void f(List<X> into)   // ❌ 예약어
 
 ---
 
-## 11. 검증하는 습관
+## 13. 검증하는 습관
 
 이 프로젝트에서 실제로 도움이 된 것들입니다.
 
@@ -1390,7 +1681,7 @@ Apex 단위 테스트  →  REST 직접 호출  →  에이전트 프리뷰 + �
 
 ---
 
-## 12. 다음에 해볼 것
+## 14. 다음에 해볼 것
 
 ### 지금 남아 있는 한계
 
