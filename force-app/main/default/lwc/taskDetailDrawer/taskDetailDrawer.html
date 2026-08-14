@@ -1,0 +1,83 @@
+<template>
+  <div class="scrim" onclick={handleClose}></div>
+
+  <aside class="drawer" role="dialog" aria-label="일정 상세">
+    <div class={toneClass}></div>
+
+    <header class="drawer__head">
+      <div>
+        <p class="drawer__number">{task.todoNumber}</p>
+        <h2 class="drawer__title">{task.subject}</h2>
+      </div>
+      <button class="close" type="button" title="닫기" onclick={handleClose}>
+        <lightning-icon
+          icon-name="utility:close"
+          size="x-small"
+          alternative-text="닫기"
+        ></lightning-icon>
+      </button>
+    </header>
+
+    <dl class="facts">
+      <div class="fact">
+        <dt>날짜</dt>
+        <dd>{dateLabel}</dd>
+      </div>
+      <div class="fact">
+        <dt>시간</dt>
+        <dd>{timeLabel}</dd>
+      </div>
+      <div class="fact">
+        <dt>우선순위</dt>
+        <dd>{task.priority}</dd>
+      </div>
+      <div class="fact">
+        <dt>상태</dt>
+        <dd>{statusText}</dd>
+      </div>
+      <div class="fact">
+        <dt>카테고리</dt>
+        <dd>{task.category}</dd>
+      </div>
+      <div class="fact">
+        <dt>기한</dt>
+        <dd>{overdueText}</dd>
+      </div>
+      <div class="fact">
+        <dt>요청자</dt>
+        <dd>{requesterText}</dd>
+      </div>
+    </dl>
+
+    <section class="block">
+      <h3 class="block__title">상세 설명</h3>
+      <p class="block__body">{descriptionText}</p>
+    </section>
+
+    <section class="block block--agent">
+      <h3 class="block__title">Agent 처리 이력</h3>
+      <div class="fact">
+        <dt>Agent 생성 여부</dt>
+        <dd>{agentCreatedText}</dd>
+      </div>
+      <div class="fact">
+        <dt>실행된 Agent Action</dt>
+        <dd>{agentActionText}</dd>
+      </div>
+    </section>
+
+    <footer class="drawer__actions">
+      <button class="btn btn--ghost" type="button" onclick={handleAskAgent}>
+        AI에게 요청
+      </button>
+      <button
+        class="btn btn--primary"
+        type="button"
+        disabled={isDone}
+        onclick={handleComplete}
+      >
+        {completeLabel}
+      </button>
+    </footer>
+  </aside>
+</template>

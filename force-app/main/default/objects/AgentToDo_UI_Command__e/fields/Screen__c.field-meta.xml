@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Screen__c</fullName>
+    <description
+  >전환할 화면 키. today / calendar / mine / received / done / assistant 중 하나이며 LWC 의 activeMenu 값과 일치합니다.</description>
+    <label>Screen</label>
+    <type>Text</type>
+    <length>40</length>
+    <required>false</required>
+</CustomField>

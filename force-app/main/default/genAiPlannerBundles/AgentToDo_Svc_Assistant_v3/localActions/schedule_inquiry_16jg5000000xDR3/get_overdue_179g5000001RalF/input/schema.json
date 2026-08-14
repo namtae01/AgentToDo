@@ -1,0 +1,14 @@
+{
+  "required" : [ ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "unused" : {
+      "title" : "사용 안 함",
+      "description" : "이 액션은 입력이 필요하지 않습니다. 항상 현재 사용자 기준으로 조회합니다. 값을 채우지 마세요.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

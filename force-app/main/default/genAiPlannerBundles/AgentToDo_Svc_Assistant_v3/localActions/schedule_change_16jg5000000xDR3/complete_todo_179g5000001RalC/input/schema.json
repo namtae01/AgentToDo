@@ -1,0 +1,14 @@
+{
+  "required" : [ "todoNumber" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "todoNumber" : {
+      "title" : "TODO 번호",
+      "description" : "완료 처리할 일정의 번호. TODO-0007 형식.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

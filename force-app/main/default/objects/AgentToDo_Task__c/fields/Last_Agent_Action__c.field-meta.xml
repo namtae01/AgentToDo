@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Last_Agent_Action__c</fullName>
+    <description
+  >이 레코드에 마지막으로 실행된 Agent Action 이름. 상세 드로어의 "실행된 Agent Action" 항목에 표시됩니다.</description>
+    <label>최근 Agent Action</label>
+    <inlineHelpText>예: CreateTodo, CompleteTodo</inlineHelpText>
+    <type>Text</type>
+    <length>255</length>
+    <required>false</required>
+    <trackHistory>false</trackHistory>
+    <unique>false</unique>
+</CustomField>

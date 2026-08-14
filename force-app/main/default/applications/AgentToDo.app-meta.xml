@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<CustomApplication xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>AgentToDo</label>
+    <description
+  >AI 일정 워크스페이스. 캘린더에서 일정을 관리하고 AgentToDo Assistant로 생성·변경·완료 처리를 실행합니다.</description>
+    <navType>Standard</navType>
+    <formFactors>Large</formFactors>
+    <uiType>Lightning</uiType>
+    <tabs>AgentToDo_Workspace</tabs>
+    <tabs>AgentToDo_Task__c</tabs>
+    <isNavAutoTempTabsDisabled>false</isNavAutoTempTabsDisabled>
+    <isNavPersonalizationDisabled>false</isNavPersonalizationDisabled>
+</CustomApplication>

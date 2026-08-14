@@ -1,0 +1,277 @@
+/*
+ * 디자인 토큰은 여기서 한 번만 선언합니다.
+ * CSS 사용자 정의 속성은 Shadow DOM 경계를 넘어 상속되므로 자식 컴포넌트가 그대로 씁니다.
+ */
+:host {
+  /* 파랑 계열 primary */
+  --atd-navy-900: #0c2340;
+  --atd-navy-800: #12305a;
+  --atd-navy-700: #1b3f74;
+  --atd-blue-600: #1d4ed8;
+  --atd-blue-500: #2563eb;
+  --atd-blue-400: #3b82f6;
+  --atd-blue-100: #dbeafe;
+  --atd-blue-050: #eff6ff;
+
+  /* 의미 색상 */
+  --atd-teal: #0d9488; /* 일반 업무 */
+  --atd-teal-bg: #ccfbf1;
+  --atd-amber: #d97706; /* 높은 우선순위 */
+  --atd-amber-bg: #fef3c7;
+  --atd-red: #dc2626; /* 기한 초과 */
+  --atd-red-bg: #fee2e2;
+  --atd-purple: #7c3aed; /* 회의 */
+  --atd-purple-bg: #ede9fe;
+
+  /* 중립 */
+  --atd-ink: #0f172a;
+  --atd-muted: #64748b;
+  --atd-line: #e2e8f0;
+  --atd-surface: #ffffff;
+  --atd-canvas: #f1f5f9;
+  --atd-radius: 14px;
+  --atd-shadow:
+    0 1px 2px rgba(15, 23, 42, 0.06), 0 8px 24px rgba(15, 23, 42, 0.06);
+
+  display: block;
+  background: var(--atd-canvas);
+  color: var(--atd-ink);
+  font-family:
+    "Segoe UI",
+    "Malgun Gothic",
+    system-ui,
+    -apple-system,
+    sans-serif;
+}
+
+.app {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  min-height: 100vh;
+  position: relative;
+}
+
+.main {
+  min-width: 0;
+  padding: 0 28px 40px;
+}
+
+/* ── 상단 바 ─────────────────────────────────────────────── */
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 260px) minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--atd-line);
+  background: var(--atd-canvas);
+  position: sticky;
+  top: 0;
+  z-index: 5;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--atd-muted);
+  font-weight: 600;
+}
+
+.page-title {
+  margin: 2px 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+
+.topbar__search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--atd-surface);
+  border: 1px solid var(--atd-line);
+  border-radius: 12px;
+  padding: 0 14px;
+  height: 42px;
+  max-width: 520px;
+}
+
+.search-input {
+  border: 0;
+  outline: none;
+  flex: 1;
+  font-size: 0.9rem;
+  background: transparent;
+  color: var(--atd-ink);
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.topbar__meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.today-stamp {
+  font-size: 0.85rem;
+  color: var(--atd-muted);
+  white-space: nowrap;
+}
+
+.icon-button {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--atd-line);
+  background: var(--atd-surface);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.icon-button:hover {
+  border-color: var(--atd-blue-400);
+}
+
+/* ── 히어로 ──────────────────────────────────────────────── */
+
+.hero {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 26px 0 20px;
+  flex-wrap: wrap;
+}
+
+.hero__title {
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.hero__sub {
+  margin: 8px 0 0;
+  color: var(--atd-muted);
+  font-size: 0.9rem;
+}
+
+.hero__actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn {
+  height: 40px;
+  padding: 0 18px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.btn--ghost {
+  background: var(--atd-surface);
+  border-color: var(--atd-line);
+  color: var(--atd-ink);
+}
+
+.btn--ghost:hover {
+  border-color: var(--atd-blue-400);
+  color: var(--atd-blue-600);
+}
+
+.btn--primary {
+  background: var(--atd-blue-600);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background: var(--atd-blue-500);
+}
+
+/* ── 본문 ────────────────────────────────────────────────── */
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 20px;
+  align-items: start;
+  margin-top: 18px;
+}
+
+.list-view {
+  margin-top: 18px;
+  max-width: 720px;
+}
+
+.empty {
+  background: var(--atd-surface);
+  border: 1px dashed var(--atd-line);
+  border-radius: var(--atd-radius);
+  padding: 48px;
+  text-align: center;
+  color: var(--atd-muted);
+}
+
+.loading {
+  position: relative;
+  height: 220px;
+}
+
+.banner {
+  margin-top: 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 0.88rem;
+}
+
+.banner--error {
+  background: var(--atd-red-bg);
+  color: var(--atd-red);
+}
+
+/* ── 플로팅 버튼 ─────────────────────────────────────────── */
+
+.fab {
+  position: fixed;
+  right: 26px;
+  bottom: 26px;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--atd-blue-600);
+  box-shadow: 0 10px 24px rgba(29, 78, 216, 0.4);
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  z-index: 20;
+}
+
+.fab:hover,
+.fab--active {
+  background: var(--atd-navy-800);
+}
+
+@media (max-width: 1180px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .topbar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}

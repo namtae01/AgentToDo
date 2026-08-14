@@ -1,0 +1,177 @@
+<template>
+  <div class="app">
+    <c-sidebar-navigation
+      active-menu={activeMenu}
+      summary={summary}
+      user-name={userName}
+      user-title={userTitle}
+      onmenuselect={handleMenuSelect}
+    ></c-sidebar-navigation>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar__title">
+          <p class="eyebrow">SCHEDULE WORKSPACE</p>
+          <h1 class="page-title">{pageTitle}</h1>
+        </div>
+
+        <div class="topbar__search">
+          <lightning-icon
+            icon-name="utility:search"
+            size="x-small"
+            alternative-text="검색"
+          ></lightning-icon>
+          <input
+            type="search"
+            class="search-input"
+            placeholder="일정, 담당자, 태그 검색"
+            value={searchTerm}
+            oninput={handleSearch}
+          />
+        </div>
+
+        <div class="topbar__meta">
+          <span class="today-stamp">{headerDate}</span>
+          <button
+            class="icon-button"
+            type="button"
+            title="AgentToDo Assistant 열기"
+            onclick={handleAssistantOpen}
+          >
+            <lightning-icon
+              icon-name="utility:chat"
+              size="x-small"
+              alternative-text="AI 어시스턴트"
+            ></lightning-icon>
+          </button>
+        </div>
+      </header>
+
+      <template lwc:if={hasError}>
+        <div class="banner banner--error" role="alert">{loadError}</div>
+      </template>
+
+      <template lwc:if={isLoading}>
+        <div class="loading">
+          <lightning-spinner
+            alternative-text="불러오는 중"
+            size="small"
+          ></lightning-spinner>
+        </div>
+      </template>
+
+      <template lwc:else>
+        <section class="hero">
+          <div>
+            <h2 class="hero__title">일정을 한눈에 정리하세요</h2>
+            <p class="hero__sub">
+              캘린더에서 일정을 선택하고, AgentToDo로 생성·변경·완료 처리를
+              실행합니다.
+            </p>
+          </div>
+          <div class="hero__actions">
+            <button
+              class="btn btn--ghost"
+              type="button"
+              onclick={handleGoToday}
+            >
+              오늘
+            </button>
+            <button
+              class="btn btn--primary"
+              type="button"
+              onclick={handleEditorOpen}
+            >
+              + 새 일정
+            </button>
+          </div>
+        </section>
+
+        <c-schedule-summary summary={summary}></c-schedule-summary>
+
+        <template lwc:if={isCalendarView}>
+          <section class="workspace">
+            <c-agent-to-do-calendar
+              tasks={visibleTasks}
+              year={visibleYear}
+              month={visibleMonth}
+              selected-date-key={selectedDateKey}
+              search-term={searchTerm}
+              ondateselect={handleDateSelect}
+              onmonthchange={handleMonthChange}
+              ontaskselect={handleTaskSelect}
+              ongotoday={handleGoToday}
+              onaddtask={handleEditorOpen}
+            ></c-agent-to-do-calendar>
+
+            <c-daily-agenda
+              tasks={agendaTasks}
+              date-key={selectedDateKey}
+              ontaskselect={handleTaskSelect}
+              ontaskcomplete={handleTaskComplete}
+              onaskagent={handleAssistantOpen}
+            ></c-daily-agenda>
+          </section>
+        </template>
+
+        <template lwc:else>
+          <section class="list-view">
+            <template lwc:if={listIsEmpty}>
+              <div class="empty">표시할 일정이 없습니다.</div>
+            </template>
+            <template lwc:else>
+              <c-daily-agenda
+                tasks={listTasks}
+                heading={pageTitle}
+                variant="list"
+                ontaskselect={handleTaskSelect}
+                ontaskcomplete={handleTaskComplete}
+                onaskagent={handleAssistantOpen}
+              ></c-daily-agenda>
+            </template>
+          </section>
+        </template>
+      </template>
+    </div>
+
+    <button
+      class={assistantButtonClass}
+      type="button"
+      title="AgentToDo Assistant"
+      onclick={handleAssistantOpen}
+    >
+      <lightning-icon
+        icon-name="utility:einstein"
+        size="small"
+        variant="inverse"
+        alternative-text="AI"
+      ></lightning-icon>
+    </button>
+  </div>
+
+  <template lwc:if={selectedTask}>
+    <c-task-detail-drawer
+      task={selectedTask}
+      onclose={handleDrawerClose}
+      oncomplete={handleTaskComplete}
+      onaskagent={handleAssistantOpen}
+    ></c-task-detail-drawer>
+  </template>
+
+  <template lwc:if={showEditor}>
+    <c-task-editor-modal
+      default-date-key={selectedDateKey}
+      onclose={handleEditorClose}
+      onsave={handleTaskCreate}
+    ></c-task-editor-modal>
+  </template>
+
+  <template lwc:if={showAssistant}>
+    <c-agent-assistant-drawer
+      tasks={tasks}
+      summary={summary}
+      onclose={handleAssistantClose}
+      onrefresh={reload}
+    ></c-agent-assistant-drawer>
+  </template>
+</template>

@@ -1,0 +1,83 @@
+<template>
+  <section class="calendar">
+    <header class="calendar__head">
+      <div class="calendar__nav">
+        <button
+          class="nav-btn"
+          type="button"
+          title="이전 달"
+          onclick={handlePrevMonth}
+        >
+          <lightning-icon
+            icon-name="utility:chevronleft"
+            size="x-small"
+            alternative-text="이전 달"
+          ></lightning-icon>
+        </button>
+        <h3 class="calendar__title">{monthTitle}</h3>
+        <button
+          class="nav-btn"
+          type="button"
+          title="다음 달"
+          onclick={handleNextMonth}
+        >
+          <lightning-icon
+            icon-name="utility:chevronright"
+            size="x-small"
+            alternative-text="다음 달"
+          ></lightning-icon>
+        </button>
+      </div>
+      <button class="today-btn" type="button" onclick={handleToday}>
+        오늘로 이동
+      </button>
+    </header>
+
+    <div class="weekdays">
+      <template for:each={weekdays} for:item="w">
+        <span key={w.key} class={w.className}>{w.label}</span>
+      </template>
+    </div>
+
+    <div class="grid">
+      <template for:each={cells} for:item="cell">
+        <div
+          key={cell.key}
+          class={cell.className}
+          data-key={cell.key}
+          onclick={handleCellClick}
+          ondblclick={handleCellDblClick}
+        >
+          <span class={cell.dayClass}>{cell.day}</span>
+
+          <div class="cell__chips">
+            <template for:each={cell.chips} for:item="chip">
+              <button
+                key={chip.recordId}
+                type="button"
+                class={chip.className}
+                data-id={chip.recordId}
+                onclick={handleChipClick}
+                title={chip.subject}
+              >
+                <span class={chip.dotClass}></span>
+                <span class="chip__text">{chip.subject}</span>
+              </button>
+            </template>
+
+            <template lwc:if={cell.hasHidden}>
+              <button
+                type="button"
+                class="chip-more"
+                data-key={cell.key}
+                onclick={handleMoreClick}
+              >
+                {cell.moreLabel}
+              </button>
+            </template>
+          </div>
+        </div>
+      </template>
+    </div>
+  </section>
+</template>

@@ -1,0 +1,81 @@
+<template>
+  <section class="agenda">
+    <header class="agenda__head">
+      <template lwc:if={isPanel}>
+        <p class="agenda__stamp">{dateStamp}</p>
+      </template>
+      <h3 class="agenda__title">{title}</h3>
+      <p class="agenda__count">{countLabel}</p>
+    </header>
+
+    <template lwc:if={hasItems}>
+      <ul class="agenda__list">
+        <template for:each={items} for:item="item">
+          <li key={item.recordId} class={item.rowClass}>
+            <span class="agenda-item__time">{item.timeLabel}</span>
+
+            <button
+              type="button"
+              class="agenda-item__body"
+              data-id={item.recordId}
+              onclick={handleSelect}
+            >
+              <span class="agenda-item__subject">{item.subject}</span>
+              <span class="agenda-item__badges">
+                <span class="badge badge--priority">{item.priority}</span>
+                <span class="badge">{item.category}</span>
+                <template lwc:if={item.showAgentBadge}>
+                  <span class="badge badge--agent">Agent 생성</span>
+                </template>
+                <template lwc:if={item.showRequester}>
+                  <span class="badge badge--from"
+                    >{item.requestedByName} 요청</span
+                  >
+                </template>
+              </span>
+            </button>
+
+            <button
+              type="button"
+              class={item.checkClass}
+              data-id={item.recordId}
+              title="완료 처리"
+              onclick={handleComplete}
+            >
+              <template lwc:if={item.isDone}>
+                <lightning-icon
+                  icon-name="utility:check"
+                  size="xx-small"
+                  variant="inverse"
+                  alternative-text="완료됨"
+                ></lightning-icon>
+              </template>
+            </button>
+          </li>
+        </template>
+      </ul>
+    </template>
+
+    <template lwc:else>
+      <p class="agenda__empty">등록된 일정이 없습니다.</p>
+    </template>
+
+    <template lwc:if={isPanel}>
+      <div class="briefing">
+        <p class="briefing__title">
+          <lightning-icon
+            icon-name="utility:einstein"
+            size="xx-small"
+            variant="inverse"
+            alternative-text="AgentToDo"
+          ></lightning-icon>
+          AgentToDo 브리핑
+        </p>
+        <p class="briefing__body">{briefing}</p>
+        <button type="button" class="briefing__cta" onclick={handleAskAgent}>
+          AI에게 오늘 일정 정리 요청
+        </button>
+      </div>
+    </template>
+  </section>
+</template>

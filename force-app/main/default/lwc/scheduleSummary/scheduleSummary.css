@@ -1,0 +1,81 @@
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--atd-surface, #fff);
+  border: 1px solid var(--atd-line, #e2e8f0);
+  border-radius: var(--atd-radius, 14px);
+  padding: 18px 20px;
+  box-shadow: var(--atd-shadow);
+}
+
+.tile__badge {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 0.9rem;
+  flex: none;
+}
+
+.tile__badge--blue {
+  background: var(--atd-blue-100, #dbeafe);
+  color: var(--atd-blue-600, #1d4ed8);
+}
+
+.tile__badge--red {
+  background: var(--atd-red-bg, #fee2e2);
+  color: var(--atd-red, #dc2626);
+}
+
+.tile__badge--amber {
+  background: var(--atd-amber-bg, #fef3c7);
+  color: var(--atd-amber, #d97706);
+}
+
+.tile__badge--purple {
+  background: var(--atd-purple-bg, #ede9fe);
+  color: var(--atd-purple, #7c3aed);
+}
+
+.tile__body {
+  min-width: 0;
+}
+
+.tile__label {
+  margin: 0;
+  font-size: 0.78rem;
+  color: var(--atd-muted, #64748b);
+}
+
+.tile__value {
+  margin: 4px 0 0;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.tile__value strong {
+  font-size: 1.7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tile__unit {
+  font-size: 0.74rem;
+  color: var(--atd-muted, #64748b);
+}
+
+@media (max-width: 1180px) {
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "count" : {
+      "title" : "건수",
+      "description" : "조회된 일정 건수",
+      "lightning:type" : "lightning__integerType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "todoNumbers" : {
+      "title" : "TODO 번호 목록",
+      "description" : "조회된 일정의 TODO 번호를 쉼표로 구분한 문자열",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : false,
+      "copilotAction:isUsedByPlanner" : true
+    },
+    "todos" : {
+      "title" : "일정 목록",
+      "description" : "한 줄에 하나씩: TODO번호 | 제목 | 마감 일시 | 우선순위 | 상태",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isDisplayable" : true,
+      "copilotAction:isUsedByPlanner" : true
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

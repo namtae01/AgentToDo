@@ -9,3 +9,8 @@
 .vscode
 
 coverage/
+
+# 에이전트 게시로 생성되는 컴파일 산출물.
+# agentGraph/*.json 은 표준 JSON 이 아니라 prettier 가 파싱에 실패합니다.
+force-app/main/default/genAiPlannerBundles/**
+force-app/main/default/bots/**

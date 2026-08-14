@@ -1,0 +1,14 @@
+{
+  "required" : [ "screen" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "screen" : {
+      "title" : "화면",
+      "description" : "전환할 화면. today(오늘), calendar(캘린더), mine(내 일정), received(받은 작업), done(완료 일정), assistant(AI 어시스턴트) 중 하나. 사용자가 말한 한국어 화면 이름을 그대로 넘겨도 됩니다.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}

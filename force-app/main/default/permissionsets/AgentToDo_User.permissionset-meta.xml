@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>AgentToDo User</label>
+    <description
+  >AgentToDo 앱 사용자에게 일정(AgentToDo_Task__c) 오브젝트에 대한 CRUD 및 필드 접근 권한을 부여합니다. Agentforce Assistant가 사용자 컨텍스트로 동작할 때도 이 권한이 적용됩니다.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <objectPermissions>
+        <object>AgentToDo_Task__c</object>
+        <allowCreate>true</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>true</allowEdit>
+        <allowDelete>true</allowDelete>
+        <viewAllRecords>false</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+    <!-- 화면 전환 신호용 플랫폼 이벤트.
+         Action 이 발행하려면 Create, LWC 가 구독하려면 Read 가 필요합니다. -->
+    <objectPermissions>
+        <object>AgentToDo_UI_Command__e</object>
+        <allowCreate>true</allowCreate>
+        <allowRead>true</allowRead>
+        <allowEdit>false</allowEdit>
+        <allowDelete>false</allowDelete>
+        <viewAllRecords>false</viewAllRecords>
+        <modifyAllRecords>false</modifyAllRecords>
+    </objectPermissions>
+    <!-- Subject__c 와 Due_At__c 는 필드 레벨 필수(required)이므로 FLS 항목을 둘 수 없습니다.
+         필수 필드는 오브젝트 접근 권한만으로 항상 읽기/쓰기가 허용됩니다. -->
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Priority__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Status__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Category__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Description__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Requested_By__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Completed_At__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Created_By_Agent__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Last_Agent_Action__c</field>
+        <readable>true</readable>
+        <editable>true</editable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <field>AgentToDo_Task__c.Is_Overdue__c</field>
+        <readable>true</readable>
+        <editable>false</editable>
+    </fieldPermissions>
+    <classAccesses>
+        <apexClass>AgentToDoController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoAgentService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <!-- Agent Action 클래스들. 에이전트 실행 사용자가 이 권한 없이는 액션을 호출할 수 없고,
+         게시(Commit Version) 시 "User doesn't have access to agent" 로 거부됩니다. -->
+    <classAccesses>
+        <apexClass>AgentToDoActionService</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoListTodosAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoOverdueTodosAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoCreateTodoAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoCompleteTodoAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>AgentToDoNavigateAction</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <!-- Agent API 호출에 쓰는 자격 증명 주체 접근 권한.
+         이 권한이 없으면 콜아웃이 401 로 실패합니다. -->
+    <externalCredentialPrincipalAccesses>
+        <externalCredentialPrincipal
+    >AgentToDo_Agent_API-AgentApiPrincipal</externalCredentialPrincipal>
+        <enabled>true</enabled>
+    </externalCredentialPrincipalAccesses>
+    <tabSettings>
+        <tab>AgentToDo_Workspace</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <tabSettings>
+        <tab>AgentToDo_Task__c</tab>
+        <visibility>Visible</visibility>
+    </tabSettings>
+    <applicationVisibilities>
+        <application>AgentToDo</application>
+        <visible>true</visible>
+    </applicationVisibilities>
+</PermissionSet>

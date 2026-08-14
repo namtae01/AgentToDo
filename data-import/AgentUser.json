@@ -1,0 +1,23 @@
+{
+  "records": [
+    {
+      "attributes": {
+        "type": "User",
+        "referenceId": "AgentToDoAgentUser"
+      },
+      "ProfileId": "00eg5000005h4EIAAY",
+      "Username": "agenttodo.agent@agenttodo.i2max.local",
+      "Alias": "atdagt",
+      "CommunityNickname": "AgentToDoAgent",
+      "Email": "ktnam@i2max.co.kr",
+      "FirstName": "AgentToDo",
+      "LastName": "Agent User",
+      "IsActive": true,
+      "ForecastEnabled": false,
+      "EmailEncodingKey": "UTF-8",
+      "LanguageLocaleKey": "en_US",
+      "LocaleSidKey": "ko",
+      "TimeZoneSidKey": "Asia/Seoul"
+    }
+  ]
+}

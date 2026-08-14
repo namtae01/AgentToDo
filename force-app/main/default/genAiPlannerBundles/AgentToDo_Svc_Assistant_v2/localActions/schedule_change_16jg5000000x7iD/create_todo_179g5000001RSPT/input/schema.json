@@ -1,0 +1,35 @@
+{
+  "required" : [ "subject", "dueAt" ],
+  "unevaluatedProperties" : false,
+  "properties" : {
+    "category" : {
+      "title" : "카테고리",
+      "description" : "Work, Meeting, Development, Review 중 하나. 비워 두면 Work.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "dueAt" : {
+      "title" : "마감 일시",
+      "description" : "사용자가 확인한 마감 날짜와 시각",
+      "lightning:type" : "lightning__dateTimeStringType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "priority" : {
+      "title" : "우선순위",
+      "description" : "High, Medium, Low 중 하나. 비워 두면 Medium.",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    },
+    "subject" : {
+      "title" : "제목",
+      "description" : "일정 제목. 예: 고객 제안서 최종 검토",
+      "lightning:type" : "lightning__textType",
+      "lightning:isPII" : false,
+      "copilotAction:isUserInput" : false
+    }
+  },
+  "lightning:type" : "lightning__objectType"
+}
